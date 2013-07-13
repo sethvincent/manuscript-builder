@@ -1,0 +1,24 @@
+{
+  "name": "manuscript-builder",
+  "version": "0.0.1",
+  "description": "compile your manuscript in multiple pages into one file",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sethvincent/manuscript-builder.git"
+  },
+  "keywords": [
+    "leanpub",
+    "readme",
+    "book",
+    "manuscript"
+  ],
+  "author": "sethvincent",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sethvincent/manuscript-builder/issues"
+  }
+}
