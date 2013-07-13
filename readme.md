@@ -8,7 +8,7 @@ It's designed to work with [leanpub](http://leanpub.com) books, but could work f
 ## usage example:
 
 ```
-var ReadmeBuilder = require('./index');
+var ReadmeBuilder = require('manuscript-builder');
 
 var readme = new ReadmeBuilder({
   target: '/test-readme.md',
