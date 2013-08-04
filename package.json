@@ -1,6 +1,6 @@
 {
   "name": "manuscript-builder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "create a one-file manuscript from a bunch of chapters files. designed for leanpub books but not limited to that.",
   "main": "index.js",
   "scripts": {
