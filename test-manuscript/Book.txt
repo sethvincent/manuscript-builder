@@ -1,3 +1,4 @@
 frontmatter:
 example.txt
+another.txt
 huh.txt

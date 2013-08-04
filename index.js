@@ -64,18 +64,15 @@ ManuscriptBuilder.prototype.compileChapters = function(arr){
   var self = this;
 
   arr.forEach(function(chapter){
-    fs.readFile(chapter, function(err, data){
-      data = data.toString().replace(/~~~~~~~~/gi, '```') + self.separator;
-      console.log(data)
-      fs.appendFile(self.target, data)
-    });
+    data = fs.readFileSync(chapter);
+    data = data.toString().replace(/~~~~~~~~/gi, '```') + self.separator;
+    fs.appendFileSync(self.target, data)
   });
 };
 
 function isNot(arr, data){
   var str = data.toString();
   if (str != 0 && arr.indexOf(str) === -1 && str != undefined){
-    console.log(str)
     return data;
   }
 }
