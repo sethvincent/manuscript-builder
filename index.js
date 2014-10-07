@@ -11,6 +11,7 @@ function ManuscriptBuilder(options){
   this.exclude = options.exclude || [];
   this.exclude = this.exclude.concat(['frontmatter:', 'mainmatter:', 'backmatter:']);
   this.separator = options.separator || '\n\n\n';
+  this.replace = options.replace || [];
 }
 
 ManuscriptBuilder.prototype.build = function(){
