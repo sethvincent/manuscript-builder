@@ -64,8 +64,15 @@ ManuscriptBuilder.prototype.compileChapters = function(arr){
   var self = this;
 
   arr.forEach(function(chapter){
-    data = fs.readFileSync(chapter);
-    data = data.toString().replace(/~~~~~~~~/gi, '```') + self.separator;
+    data = fs.readFileSync(chapter, 'utf8') + self.separator;
+    
+    if (self.replace.length > 0) {
+      console.log(self.replace)
+      for (var i=0; i<self.replace.length; i++) {
+        data = data.replace(self.replace[i][0], self.replace[i][1]);
+      }
+    }
+    
     fs.appendFileSync(self.target, data)
   });
 };
