@@ -1,86 +1,57 @@
-var fs = require('fs');
+var fs = require('fs')
+var each = require('each-async')
 
-module.exports = ManuscriptBuilder;
+module.exports = function buildManuscript (options, done) {
+  var dir = process.cwd() || options.dir
+  var target = dir + options.target || dir + '/readme.md'
+  var tableOfContents = dir + options.tableOfContents || dir + '/manuscript/Book.txt'
+  var bookDir = dir + options.bookDir || dir + '/manuscript/'
+  var include = options.include || []
+  var exclude = (options.exclude || []).concat(['frontmatter:', 'mainmatter:', 'backmatter:'])
+  var separator = options.separator || '\n\n\n'
+  var replace = options.replace || []
+  var readList = fs.createReadStream(tableOfContents)
 
-function ManuscriptBuilder(options){
-  var dir = process.cwd() || options.dir;
-  this.target = dir + options.target || dir + '/readme.md';
-  this.tableOfContents = dir + options.tableOfContents || dir + '/manuscript/Book.txt';
-  this.bookDir = dir + options.bookDir || dir + '/manuscript/';
-  this.include = options.include || [];
-  this.exclude = options.exclude || [];
-  this.exclude = this.exclude.concat(['frontmatter:', 'mainmatter:', 'backmatter:']);
-  this.separator = options.separator || '\n\n\n';
-  this.replace = options.replace || [];
+  readList.on('data', function (data) {
+    var source = prepareSource(data, include)
+    fs.unlink(target, function () {
+      compileChapters(source, done)
+    })
+  })
+
+  function prepareSource (main, include) {
+    main = main.toString()
+      .split('\n')
+      .filter(function (item) {
+        return isIncluded(exclude, item)
+      })
+      .map(function (item) {
+        return bookDir + item
+      }
+    )
+    return include.concat(main)
+  }
+
+  function compileChapters (arr, done) {
+    each(arr, function (chapter, i, next) {
+      fs.readFile(chapter, 'utf8', function (err, data) {
+        data = data + separator
+        if (replace.length > 0) {
+          for (var i = 0; i < replace.length; i++) {
+            data = data.replace(replace[i][0], replace[i][1])
+          }
+        }
+        fs.appendFile(target, data, next)
+      })
+    }, function end () {
+      fs.readFile(target, 'utf8', done)
+    })
+  }
 }
 
-ManuscriptBuilder.prototype.build = function(){
-  this.readChapterList();
-};
-
-ManuscriptBuilder.prototype.readChapterList = function(){
-  var self = this;
-
-  var readList = fs.createReadStream(this.tableOfContents);
-
-  readList.on('data', function(data){
-    self.source = self.prepareSources(data, this.include);
-
-    self.regenFile(this.source);
-  });
-};
-
-ManuscriptBuilder.prototype.regenFile = function(arr){
-  var self = this;
-  var source = arr;
-
-  fs.exists(this.target, function(exists){
-    if (exists){
-      fs.unlink(self.target, function(){
-        self.compileChapters(self.source);
-      });
-    } else {
-      self.compileChapters(self.source);
-    }
-  });
-};
-
-ManuscriptBuilder.prototype.prepareSources = function(main, include){
-  var self = this;
-
-  var main = main.toString()
-    .split('\n')
-    .filter(function(item){
-      return isNot(self.exclude, item);
-    })
-    .map(function(item){
-      return self.bookDir + item;
-    }
-  );
-
-  return this.include.concat(main);
-};
-
-ManuscriptBuilder.prototype.compileChapters = function(arr){
-  var self = this;
-
-  arr.forEach(function(chapter){
-    data = fs.readFileSync(chapter, 'utf8') + self.separator;
-    
-    if (self.replace.length > 0) {
-      console.log(self.replace)
-      for (var i=0; i<self.replace.length; i++) {
-        data = data.replace(self.replace[i][0], self.replace[i][1]);
-      }
-    }
-    
-    fs.appendFileSync(self.target, data)
-  });
-};
-
-function isNot(arr, data){
-  var str = data.toString();
-  if (str != 0 && arr.indexOf(str) === -1 && str != undefined){
-    return data;
+function isIncluded (arr, data) {
+  var str = data.toString()
+  if (str !== 0 && arr.indexOf(str) === -1 && str !== undefined) {
+    return data
   }
 }

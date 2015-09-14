@@ -8,15 +8,14 @@ It's designed to work with [leanpub](http://leanpub.com) books, but could work f
 ## usage example:
 
 ```
-var ReadmeBuilder = require('manuscript-builder');
+var build = require('manuscript-builder')
 
-var readme = new ReadmeBuilder({
+build({
   target: '/test-readme.md',
-  exclude: ['huh.txt'],
   include: ['preface.md'],
   bookDir: '/test-manuscript/',
   tableOfContents: '/test-manuscript/Book.txt'
-});
-
-readme.build();
+}, function (err, markdown) {
+  console.log(err, markdown)
+})
 ```
