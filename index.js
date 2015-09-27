@@ -1,5 +1,5 @@
 var fs = require('fs')
-var each = require('each-async')
+var each = require('each-series')
 
 module.exports = function buildManuscript (options, done) {
   var dir = process.cwd() || options.dir

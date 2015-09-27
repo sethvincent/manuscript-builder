@@ -1,6 +1,6 @@
 {
   "name": "manuscript-builder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "create a one-file manuscript from a bunch of chapters files. designed for leanpub books but not limited to that.",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
     "url": "https://github.com/sethvincent/manuscript-builder/issues"
   },
   "dependencies": {
-    "each-async": "^1.1.1"
+    "each-series": "^1.0.0"
   }
 }
